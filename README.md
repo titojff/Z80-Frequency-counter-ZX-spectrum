@@ -7,3 +7,4 @@ HL counts the pulses
 BC is a dec counters responsible for the one second total time
 
 Added a screenshot with the ZX BASIC with the assembler
+Included tzx file with all the code
