@@ -7,7 +7,7 @@
         DI
 MainLoopDelay:
 
-        NOP                 ;4 This NOP's exist to compensate T states in lines 37,38
+        NOP                 ;4 This NOP's exist to compensate T states in lines 47,48
                             ; If rising edge, jumps sonner does not execute those lines
         NOP                 ;4
         NOP                 ;4
