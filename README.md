@@ -5,3 +5,5 @@ All code is carefully timed to run for one second,
 during it it counts the rising edges on the EAR port.
 HL counts the pulses
 BC is a dec counters responsible for the one second total time
+
+Added a screenshot with the ZX BASIC with the assembler
