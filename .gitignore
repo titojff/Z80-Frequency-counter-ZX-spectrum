@@ -1,0 +1,9 @@
+# macOS system files
+.DS_Store
+
+# Vim swap files
+*.swp
+
+# Build artifacts
+*.o
+
