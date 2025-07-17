@@ -1,9 +1,10 @@
-        ORG 32768           ;0   Start of machine code
+        ORG 60000           ;0   Start of machine code
                             ;   The first number in each comment are T states each instruction takes
-        LD HL, 0            ;10 Reset counter (HL = 0)
-        LD D, 0             ;7  Store last MIC state
-        LD B,155            ;   timer : 1 second~ 3500000 Tcycles
-        LD C,255            ;   timer :       
+        LD BC, 0            ;10 Reset counter (BC = 0)
+        ;LD D, 0             ;7  Store last MIC state
+        LD D,B		    ; 4 Store last MIC state
+        LD H,155            ;   timer : 1 second~ 3500000 Tcycles
+        LD L,255            ;   timer :       
         DI
 MainLoopDelay:
 
@@ -15,12 +16,12 @@ MainLoopDelay:
 
 MainLoop:
 
-        DEC C               ;4   timing block START
+        DEC L               ;4   timing block START
         JP Z, decB          ;10
         JP continue         ;10 
 decB: 
-        LD C, 255           ;7
-        DEC B               ;4
+        LD L, 255           ;7
+        DEC H               ;4
         JP Z, retBlock      ;10    timing block END
         NOP                 ;4 1   10*NOP's to adjust the timing
         NOP                 ;4 2
@@ -44,12 +45,12 @@ continue:
         AND E               ;4 Detect rising edge
         JP Z, MainLoopDelay ;10 NO rising edge  
         
-        INC HL              ;6 Count a rising edge
+        INC BC              ;6 Count a rising edge
         JP MainLoop         ;10
 
 retBlock:
 
-        LD (60000), HL      ;16 Store result at address 60000 
+        ;LD (60000), HL      ;16 Store result at address 60000 
         EI
         RET                 ;10
         
