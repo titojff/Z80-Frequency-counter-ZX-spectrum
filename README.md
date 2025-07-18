@@ -7,3 +7,11 @@ BC counts the pulses
 HL is a dec counters responsible for the one second total time
 
 Included tzx file with all the code
+
+Commands needed:
+
+https://github.com/chris-y/zmakebas
+
+https://github.com/dominicjprice/tap2tzx
+
+https://github.com/mkoloberdin/pasmo
