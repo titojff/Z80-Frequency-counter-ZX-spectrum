@@ -443,6 +443,8 @@ Understanding the timing calculations is crucial for:
 | BC | Pulse counter (incremented on each rising edge) | 0-65535 (16-bit), maximum measurable frequency |
 | HL | Loop counter (decremented in precisely timed loop for 1-second duration) | Calculated value for exact 1-second timing |
 | A | Signal sampling and edge detection | Current EAR port state |
+| E | Current MIC value | Current sample from EAR port |
+| D | Previous MIC value | Previous sample for edge detection comparison |
 
 ### Timing Considerations
 
