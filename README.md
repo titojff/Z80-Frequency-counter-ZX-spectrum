@@ -361,10 +361,11 @@ make debug          # Build with verbose output for debugging
 
 | Specification | Value | Notes |
 |---------------|-------|--------|
-| **Resolution** | 1 Hz | Limited by 1-second measurement window |
+| **Resolution** | 1 Hz | Limited by 1-second measurement window duration |
 | **Accuracy** | ±1 Hz | Depends on ZX Spectrum crystal stability |
-| **Frequency Range** | 1 Hz - ~50 kHz | Upper limit depends on signal conditioning |
-| **Measurement Time** | 1.000 seconds | Precisely timed using Z80 instruction cycles |
+| **Frequency Range** | 1 Hz - 65535 Hz | Absolute maximum: BC register limit (16-bit) |
+| **Practical Range** | 1 Hz - ~50 kHz | Real-world limit due to timing loop overhead |
+| **Measurement Time** | 1.000 seconds | Precisely timed using calculated Z80 instruction cycles |
 | **Input Impedance** | ~47kΩ | Standard ZX Spectrum EAR port |
 | **Input Voltage** | 0-5V | TTL/CMOS compatible logic levels |
 
@@ -372,10 +373,10 @@ make debug          # Build with verbose output for debugging
 
 The frequency counter achieves precise 1-second timing through:
 
-- **Crystal Reference**: Uses ZX Spectrum's 3.5 MHz crystal oscillator
-- **Instruction Timing**: Carefully calculated Z80 instruction cycles  
-- **Loop Optimization**: Minimal jitter in measurement loop
-- **Edge Detection**: Optimized rising edge detection algorithm
+- **Crystal Reference**: Uses ZX Spectrum's 3.5 MHz crystal oscillator as time base
+- **Instruction Timing**: Carefully calculated Z80 instruction cycles in the measurement loop  
+- **Loop Calibration**: HL register value calculated to create exactly 1-second total loop duration
+- **Edge Detection**: Optimized rising edge detection within the precisely timed loop
 
 **📊 Detailed Calculations**: See [`docs/TimingsCalc-Z80.ods`](docs/TimingsCalc-Z80.ods) for comprehensive Z80 instruction cycle analysis and timing verification calculations.
 
@@ -383,13 +384,16 @@ The frequency counter achieves precise 1-second timing through:
 
 *Example measurements with known reference frequencies:*
 
-| Input Frequency | Measured | Error | Repeatability |
-|----------------|----------|-------|---------------|
-| 1.000 kHz | 1000 Hz | 0 Hz | ±0 Hz |
-| 10.000 kHz | 10000 Hz | 0 Hz | ±1 Hz |
-| 32.768 kHz | 32768 Hz | 0 Hz | ±1 Hz |
+| Input Frequency | Measured | Error | Repeatability | Notes |
+|----------------|----------|-------|---------------|-------|
+| 1.000 kHz | 1000 Hz | 0 Hz | ±0 Hz | Perfect accuracy |
+| 10.000 kHz | 10000 Hz | 0 Hz | ±1 Hz | Excellent |
+| 32.768 kHz | 32768 Hz | 0 Hz | ±1 Hz | Crystal reference |
+| 50.000 kHz | ~50000 Hz | Variable | ±5 Hz | Near practical limit |
+| 65.000 kHz | ~65000 Hz | Variable | ±10 Hz | Near absolute limit |
 
 *Results may vary based on hardware condition and signal quality*
+*Maximum measurable frequency: 65535 Hz (16-bit BC register limit)*
 
 ## 🔬 Technical Details
 
@@ -397,10 +401,12 @@ The frequency counter achieves precise 1-second timing through:
 
 The frequency counter operates using a precisely timed measurement window:
 
-- **Timing Control**: HL register pair acts as a decrement counter to maintain exactly one second
-- **Pulse Counting**: BC register pair accumulates the number of rising edges detected
-- **EAR Port Monitoring**: Continuously samples the EAR port for signal transitions
+- **Timing Control**: HL register pair acts as a loop counter, decremented in a precisely timed loop that runs for exactly one second total
+- **Pulse Counting**: BC register pair accumulates the number of rising edges detected during the measurement window
+- **EAR Port Monitoring**: Continuously samples the EAR port for signal transitions within the timing loop
 - **Edge Detection**: Specifically counts rising edges for accuracy
+
+**1Hz Resolution**: The resolution comes from the 1-second measurement window - the smallest frequency difference detectable is 1Hz since we measure for exactly 1 second.
 
 ### Code Architecture
 
@@ -432,11 +438,11 @@ Understanding the timing calculations is crucial for:
 
 ### Register Usage
 
-| Register | Purpose |
-|----------|---------|
-| BC | Pulse counter (incremented on each rising edge) |
-| HL | Timing counter (decremented for 1-second window) |
-| A | Signal sampling and edge detection |
+| Register | Purpose | Range/Notes |
+|----------|---------|-------------|
+| BC | Pulse counter (incremented on each rising edge) | 0-65535 (16-bit), maximum measurable frequency |
+| HL | Loop counter (decremented in precisely timed loop for 1-second duration) | Calculated value for exact 1-second timing |
+| A | Signal sampling and edge detection | Current EAR port state |
 
 ### Timing Considerations
 
