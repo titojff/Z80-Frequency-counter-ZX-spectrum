@@ -36,7 +36,7 @@ decB:
                 
 continue:
         
-        IN A, (0xFE)        ;11 Read MIC port (bit 3 = EAR)
+        IN A, (0xFE)        ;11 Read MIC port 
         AND 64              ;7 Mask out everything but  bit 6 ver schematic
         LD E, A             ;4 Save current MIC value
         LD A, D             ;4 Load previous MIC
