@@ -1,8 +1,8 @@
         ORG 60000           ;0   Start of machine code
                             ;   The first number in each comment are T states each instruction takes
         LD BC, 0            ;10 Reset counter (BC = 0)
-        ;LD D, 0             ;7  Store last MIC state
-        LD D,B		    ; 4 Store last MIC state
+        ;LD D, 0             ;7  Store last EAR state
+        LD D,B		    ; 4 Store last EAR state
         LD H,155            ;   timer : 1 second~ 3500000 Tcycles
         LD L,255            ;   timer :       
         DI
@@ -36,12 +36,12 @@ decB:
                 
 continue:
         
-        IN A, (0xFE)        ;11 Read MIC port 
+        IN A, (0xFE)        ;11 Read EAR port 
         AND 64              ;7 Mask out everything but  bit 6 ver schematic
-        LD E, A             ;4 Save current MIC value
-        LD A, D             ;4 Load previous MIC
+        LD E, A             ;4 Save current EAR value
+        LD A, D             ;4 Load previous EAR
         CPL                 ;4 Invert bits
-        LD D, E             ;4 Update last MIC state
+        LD D, E             ;4 Update last EAR state
         AND E               ;4 Detect rising edge
         JP Z, MainLoopDelay ;10 NO rising edge  
         
