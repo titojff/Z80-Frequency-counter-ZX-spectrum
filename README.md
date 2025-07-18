@@ -38,6 +38,7 @@ A precise frequency counter implementation for the ZX Spectrum 48K, written in Z
 └── docs/                 # Additional documentation
     ├── technical.md     # Technical specifications
     ├── TimingsCalc-Z80.ods  # Z80 timing calculations spreadsheet
+    ├── TimingsCalc-Z80.png  # Z80 timing calculations spreadsheet
     └── examples/        # Usage examples
 ```
 
