@@ -7,7 +7,7 @@
         DI
 MainLoopDelay:
 
-        NOP                 ;4 This NOP's exist to compensate T states in lines 47,48
+        NOP                 ;4 This NOP's exist to compensate T states in lines 37,38
                             ; If rising edge, jumps sonner does not execute those lines
         NOP                 ;4
         NOP                 ;4
@@ -22,16 +22,12 @@ decB:
         LD C, 255           ;7
         DEC B               ;4
         JP Z, retBlock      ;10    timing block END
-        NOP                 ;4 1   10*NOP's to adjust the timing
-        NOP                 ;4 2
-        NOP                 ;4 3
-        NOP                 ;4 4
-        NOP                 ;4 5
-        NOP                 ;4 6
-        NOP                 ;4 7
-        NOP                 ;4 8
-        NOP                 ;4 9
-        NOP                 ;4 10
+        LD C, 255           ;7     to adjust the timing 42T total
+        LD C, 255           ;7
+        LD C, 255           ;7
+        LD C, 255           ;7        NOT TESTED YET
+        LD C, 255           ;7
+        LD C, 255           ;7
                 
 continue:
         
@@ -53,40 +49,3 @@ retBlock:
         EI
         RET                 ;10
         
-                           
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
